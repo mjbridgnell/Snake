@@ -1,6 +1,7 @@
 
 #include "game.h"
 #include <ncurses.h>
+#include <random>
 
 using namespace std;
 
@@ -20,12 +21,16 @@ void Game::print_board()
                 {
                     if (k == 0)
                         cell = 'X';
-                    else   
+                    else
                         cell = 'O';
-                        
+
                     break;
                 }
             }
+
+            if (m_apple.get_x() == j && m_apple.get_y() == i)
+                cell = 'A';
+
             mvprintw(i, j * 2, "%c", cell);
         }
     }
@@ -80,4 +85,39 @@ void Game::check_bounds()
         if (head.first == snake[i].first && head.second == snake[i].second)
             m_snake.set_alive(false);
     }
+
+    if (head.first == m_apple.get_x() && head.second == m_apple.get_y())
+    {
+        m_snake.increase_snake();
+        spawn_apple();
+    }
+}
+
+void Game::spawn_apple()
+{
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> distr(0, 9);
+
+    int random_x {};
+    int random_y {};
+    bool test = true;
+    auto snake = m_snake.get_body();
+
+    while (test)
+    {
+        random_x = distr(gen);
+        random_y = distr(gen);
+        test = false;
+        for (int i = 0; i < snake.size(); i++)
+        {
+            if (random_x == snake[i].first && random_y == snake[i].second)
+            {
+                test = true;
+            }
+        }
+    }
+
+    m_apple.set_x(random_x);
+    m_apple.set_y(random_y);
 }

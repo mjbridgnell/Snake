@@ -1,6 +1,7 @@
 #include <vector>
 #include <iostream>
 #include "snake.h"
+#include "apple.h"
 
 #ifndef GAME_H
 #define GAME_H
@@ -12,11 +13,13 @@ class Game
     private:
         std::vector<std::vector<int>> m_board;
         Snake m_snake;
+        Apple m_apple;
 
     public:
         Game() 
         : m_board {BOARD_SIZE, std::vector<int>(BOARD_SIZE)}
         , m_snake {Snake()}
+        , m_apple {Apple(8, 5)}
         {}
 
         std::vector<std::vector<int>>& get_board() { return m_board; }
@@ -24,6 +27,7 @@ class Game
         void print_board();
         bool check_input();
         void check_bounds();
+        void spawn_apple();
 };
 
 #endif
