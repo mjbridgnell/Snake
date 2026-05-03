@@ -1,9 +1,9 @@
-Snake
+#Snake
 
 A simple terminal-based Snake game written in C++ using the ncurses library for rendering and input.
 
 
-Features
+#Features
 
 Real-time snake movement
 
@@ -12,11 +12,11 @@ Keyboard controls (wasd)
 Terminal-based UI via ncurses
 
 
-Requirements
+#Requirements
 
 C++ compiler with C++17 support
 
 ncurses library installed
 
 
-Compile with "make"
+#Compile with "make"
