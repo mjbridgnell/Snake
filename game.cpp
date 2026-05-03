@@ -62,9 +62,6 @@ bool Game::check_input()
         case 's':
             m_snake.set_direction('d');
             break;
-        case 'i':
-            m_snake.increase_snake();
-            break;
         }
     }
 
@@ -86,6 +83,7 @@ void Game::check_bounds()
             m_snake.set_alive(false);
     }
 
+    // Check apple collision
     if (head.first == m_apple.get_x() && head.second == m_apple.get_y())
     {
         m_snake.increase_snake();
@@ -93,6 +91,7 @@ void Game::check_bounds()
     }
 }
 
+// Spawns apple randomly, checks to make sure it does not spawn on top of snake
 void Game::spawn_apple()
 {
     random_device rd;
