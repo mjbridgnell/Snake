@@ -20,7 +20,7 @@ void Snake::go_right()
         m_grow = false; // grow: skip removing tail once
     }
 
-    m_direction = 'r';
+    m_direction = 'd';
 }
 
 void Snake::go_left()
@@ -41,7 +41,7 @@ void Snake::go_left()
         m_grow = false;
     }
 
-    m_direction = 'l';
+    m_direction = 'a';
 }
 
 void Snake::go_up()
@@ -62,7 +62,7 @@ void Snake::go_up()
         m_grow = false; 
     }
 
-    m_direction = 'u';
+    m_direction = 'w';
 }
 
 void Snake::go_down()
@@ -83,23 +83,23 @@ void Snake::go_down()
         m_grow = false;
     }
 
-    m_direction = 'd';
+    m_direction = 's';
 }
 
 void Snake::go_dir()
 {
     switch (m_direction)
     {
-    case 'r':
+    case 'd':
         go_right();
         break;
-    case 'l':
+    case 'a':
         go_left();
         break;
-    case 'u':
+    case 'w':
         go_up();
         break;
-    case 'd':
+    case 's':
         go_down();
         break;
     default:
@@ -109,13 +109,13 @@ void Snake::go_dir()
 
 void Snake::set_direction(char dir)
 {
-    if (m_direction == 'r' && dir == 'l') // Cannot switch directions
+    if (m_direction == 'd' && dir == 'a') // Cannot switch directions
         return;
-    if (m_direction == 'l' && dir == 'r')
+    if (m_direction == 'a' && dir == 'd')
         return;
-    if (m_direction == 'u' && dir == 'd')
+    if (m_direction == 'w' && dir == 's')
         return;
-    if (m_direction == 'd' && dir == 'u')
+    if (m_direction == 's' && dir == 'w')
         return;
 
     m_direction = dir;

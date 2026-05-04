@@ -8,9 +8,7 @@ class Apple
         int m_y {};
     
     public:
-        Apple(int x, int y) 
-        : m_x {x}
-        , m_y {y}
+        Apple()
         {}
         int get_x() { return m_x; }
         int get_y() { return m_y; }

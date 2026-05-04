@@ -7,6 +7,7 @@ using namespace std;
 
 void Game::print_board()
 {
+    /*
     auto &cur_snake = m_snake.get_body();
 
     for (int i = 0; i < m_board.size(); i++)
@@ -33,6 +34,29 @@ void Game::print_board()
 
             mvprintw(i, j * 2, "%c", cell);
         }
+    } */
+
+    for (auto &row : m_render)
+        std::fill(row.begin(), row.end(), '.');
+
+    auto &snake = m_snake.get_body();
+
+    for (int i = 0; i < snake.size(); i++)
+    {
+        int x = snake[i].first;
+        int y = snake[i].second;
+
+        m_render[y][x] = (i == 0) ? 'X' : 'O';
+    }
+
+    m_render[m_apple.get_y()][m_apple.get_x()] = 'A';
+
+    for (int i = 0; i < m_render.size(); i++)
+    {
+        for (int j = 0; j < m_render[i].size(); j++)
+        {
+            mvprintw(i, j * 2, "%c", m_render[i][j]);
+        }
     }
 }
 
@@ -51,16 +75,16 @@ bool Game::check_input()
         switch (last_valid)
         {
         case 'd':
-            m_snake.set_direction('r');
+            m_snake.set_direction('d');
             break;
         case 'a':
-            m_snake.set_direction('l');
+            m_snake.set_direction('a');
             break;
         case 'w':
-            m_snake.set_direction('u');
+            m_snake.set_direction('w');
             break;
         case 's':
-            m_snake.set_direction('d');
+            m_snake.set_direction('s');
             break;
         }
     }
@@ -94,8 +118,6 @@ void Game::check_bounds()
 // Spawns apple randomly, checks to make sure it does not spawn on top of snake
 void Game::spawn_apple()
 {
-    random_device rd;
-    mt19937 gen(rd());
     uniform_int_distribution<> distr(0, 9);
 
     int random_x {};
@@ -105,8 +127,8 @@ void Game::spawn_apple()
 
     while (test)
     {
-        random_x = distr(gen);
-        random_y = distr(gen);
+        random_x = distr(m_gen);
+        random_y = distr(m_gen);
         test = false;
         for (int i = 0; i < snake.size(); i++)
         {

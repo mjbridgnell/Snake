@@ -6,6 +6,8 @@
 
 using namespace std;
 
+int g_high_score {};
+
 bool start()
 {
     initscr();
@@ -33,10 +35,16 @@ bool start()
         this_thread::sleep_for(chrono::milliseconds(300));
     }
 
-    clear();
-    my_game.print_board();
+    //clear();
+    //my_game.print_board();
+
+    int cur_score = my_game.get_snake().get_length();
+    g_high_score = max(g_high_score, cur_score);
+
     mvprintw(12, 0, "GAME OVER");
-    mvprintw(13, 0, "PLAY AGAIN? (y/n)");
+    mvprintw(13, 0, "High Score: %d", g_high_score);
+    mvprintw(14, 0, "PLAY AGAIN? (y/n)");
+
     refresh();
 
     int ch;
