@@ -3,45 +3,14 @@
 #include <ncurses.h>
 #include <random>
 
-using namespace std;
-
 void Game::print_board()
 {
-    /*
-    auto &cur_snake = m_snake.get_body();
-
-    for (int i = 0; i < m_board.size(); i++)
-    {
-        for (int j = 0; j < m_board[i].size(); j++)
-        {
-            char cell = '.';
-
-            for (int k = 0; k < cur_snake.size(); k++)
-            {
-                if (j == cur_snake[k].first && i == cur_snake[k].second)
-                {
-                    if (k == 0)
-                        cell = 'X';
-                    else
-                        cell = 'O';
-
-                    break;
-                }
-            }
-
-            if (m_apple.get_x() == j && m_apple.get_y() == i)
-                cell = 'A';
-
-            mvprintw(i, j * 2, "%c", cell);
-        }
-    } */
-
     for (auto &row : m_render)
         std::fill(row.begin(), row.end(), '.');
 
     auto &snake = m_snake.get_body();
 
-    for (int i = 0; i < snake.size(); i++)
+    for (std::size_t i = 0; i < snake.size(); i++)
     {
         int x = snake[i].first;
         int y = snake[i].second;
@@ -51,11 +20,11 @@ void Game::print_board()
 
     m_render[m_apple.get_y()][m_apple.get_x()] = 'A';
 
-    for (int i = 0; i < m_render.size(); i++)
+    for (std::size_t i = 0; i < m_render.size(); i++)
     {
-        for (int j = 0; j < m_render[i].size(); j++)
+        for (std::size_t j = 0; j < m_render[i].size(); j++)
         {
-            mvprintw(i, j * 2, "%c", m_render[i][j]);
+            mvprintw(static_cast<int>(i), static_cast<int>(j) * 2, "%c", m_render[i][j]);
         }
     }
 }
@@ -101,7 +70,7 @@ void Game::check_bounds()
 
     // Check snake self collision
     auto snake = m_snake.get_body();
-    for (int i = 1; i < snake.size(); i++)
+    for (std::size_t i = 1; i < snake.size(); i++)
     {
         if (head.first == snake[i].first && head.second == snake[i].second)
             m_snake.set_alive(false);
@@ -118,7 +87,7 @@ void Game::check_bounds()
 // Spawns apple randomly, checks to make sure it does not spawn on top of snake
 void Game::spawn_apple()
 {
-    uniform_int_distribution<> distr(0, 9);
+    std::uniform_int_distribution<> distr(0, 9);
 
     int random_x {};
     int random_y {};
@@ -130,7 +99,7 @@ void Game::spawn_apple()
         random_x = distr(m_gen);
         random_y = distr(m_gen);
         test = false;
-        for (int i = 0; i < snake.size(); i++)
+        for (std::size_t i = 0; i < snake.size(); i++)
         {
             if (random_x == snake[i].first && random_y == snake[i].second)
             {

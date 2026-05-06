@@ -4,8 +4,6 @@
 #include <thread>
 #include <ncurses.h>
 
-using namespace std;
-
 int g_high_score {};
 
 bool start()
@@ -32,14 +30,14 @@ bool start()
         my_game.print_board();
         refresh();
 
-        this_thread::sleep_for(chrono::milliseconds(300));
+        std::this_thread::sleep_for(std::chrono::milliseconds(250));
     }
 
     //clear();
     //my_game.print_board();
 
     int cur_score = my_game.get_snake().get_length();
-    g_high_score = max(g_high_score, cur_score);
+    g_high_score = std::max(g_high_score, cur_score);
 
     mvprintw(12, 0, "GAME OVER");
     mvprintw(13, 0, "High Score: %d", g_high_score);

@@ -18,5 +18,3 @@ C++ compiler with C++17 support
 
 ncurses library installed
 
-
-Compile with "make"
