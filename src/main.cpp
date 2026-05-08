@@ -2,74 +2,109 @@
 #include "snake.h"
 #include <chrono>
 #include <thread>
-#include <ncurses.h>
+#include <optional>
+#include <SFML/Graphics.hpp>
 
-int g_high_score {};
+int g_high_score{};
 
-bool start()
+bool play_again(sf::RenderWindow& window, const sf::Font font)
 {
-    initscr();
-    cbreak();
-    noecho();
-    keypad(stdscr, TRUE);
-    nodelay(stdscr, TRUE);
-    timeout(0);
+    sf::Text text;
+    text.setFont(font);
+    text.setString("GAME OVER\n"
+        "Score: " + std::to_string(g_high_score) +
+        "\nPlay Again? (y/n)" 
+    );
+    text.setCharacterSize(24);
+    text.setFillColor(sf::Color::Black);
+    
+    sf::FloatRect bounds = text.getLocalBounds();
+    text.setOrigin(
+        bounds.left + bounds.width / 2.f,
+        bounds.top + bounds.height / 2.f
+    );
 
-    Game my_game{};
-
-    while (true) // game loop
+    text.setPosition(
+        window.getSize().x / 2.f,
+        window.getSize().y / 2.f
+    );
+    
+    while (window.isOpen())
     {
-        my_game.check_input();
-        my_game.get_snake().go_dir();
-        my_game.check_bounds();
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
 
-        if (!my_game.get_snake().check_alive())
-            break;
+            if (event.type == sf::Event::KeyPressed)
+            {
+                if (event.key.code == sf::Keyboard::N)
+                {
+                    return false;
+                }
+                if (event.key.code == sf::Keyboard::Y)
+                {
+                    return true;
+                }
+            }
+        }
 
-        clear();
-        my_game.print_board();
-        refresh();
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(250));
+        window.clear(sf::Color::White);
+        window.draw(text);
+        window.display();
     }
-
-    //clear();
-    //my_game.print_board();
-
-    int cur_score = my_game.get_snake().get_length();
-    g_high_score = std::max(g_high_score, cur_score);
-
-    mvprintw(12, 0, "GAME OVER");
-    mvprintw(13, 0, "High Score: %d", g_high_score);
-    mvprintw(14, 0, "PLAY AGAIN? (y/n)");
-
-    refresh();
-
-    int ch;
-    while (true)
-    {
-        ch = getch();
-        if (ch == 'y' || ch == 'n')
-            break;
-    }
-
-    if (ch == 'n')
-    {
-        endwin();
-        return false;;
-    }
-
-    clear();
-    refresh();
     return true;
 }
 
 int main()
 {
-    bool keep_playing = true;
-    while (keep_playing)
+    sf::RenderWindow window(sf::VideoMode({200, 200}), "MAX SNAKE :D");
+    sf::Font font;
+
+    if (!font.loadFromFile("src/arial.ttf"))
     {
-        keep_playing = start();
+        return 1;
     }
+
+    while (window.isOpen())
+    {
+        Game my_game;
+
+        while (true) // game loop
+        {
+            sf::Event event;
+
+            while (window.pollEvent(event))
+            {
+                if (event.type == sf::Event::Closed)
+                    window.close();
+            }
+
+            window.clear(sf::Color::White);
+
+            my_game.check_input();
+            my_game.get_snake().go_dir();
+            my_game.check_bounds();
+
+            if (!my_game.get_snake().check_alive())
+                break;
+
+            my_game.print_board(window);
+
+            window.display();
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(150));
+        }
+
+        int cur_score = my_game.get_snake().get_length();
+        g_high_score = std::max(g_high_score, cur_score);
+
+        window.clear(sf::Color::White);
+
+        if (!play_again(window, font))
+            return 0;
+    }
+
     return 0;
 }

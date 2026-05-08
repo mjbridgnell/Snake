@@ -107,7 +107,7 @@ void Snake::go_dir()
     }
 }
 
-void Snake::set_direction(char dir)
+void Snake::set_direction(const char dir)
 {
     if (m_direction == 'd' && dir == 'a') // Cannot switch directions
         return;

@@ -29,7 +29,7 @@ public:
     void go_up();
     void go_down();
     void go_dir();
-    void set_direction(char);
+    void set_direction(const char);
     
     void set_alive(bool alive) { m_alive = alive; }
     bool check_alive() { return m_alive; }

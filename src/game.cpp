@@ -1,61 +1,64 @@
 
 #include "game.h"
-#include <ncurses.h>
 #include <random>
 
-void Game::print_board()
+void Game::print_board(sf::RenderWindow &window)
 {
-    for (auto &row : m_render)
-        std::fill(row.begin(), row.end(), '.');
-
     auto &snake = m_snake.get_body();
+
+    for (std::size_t i = 0; i < m_board.size(); i++)
+    {
+        for (std::size_t j = 0; j < m_board[i].size(); j++)
+        {
+            sf::RectangleShape rectangle({20.f, 20.f});
+            rectangle.setPosition({20.f * static_cast<float>(i), 20.f * static_cast<float>(j)});
+            rectangle.setFillColor(sf::Color(255, 255, 255));
+            // rectangle.setOutlineThickness(2.f);
+            // rectangle.setOutlineColor(sf::Color(0, 0, 0));
+            window.draw(rectangle);
+        }
+    }
 
     for (std::size_t i = 0; i < snake.size(); i++)
     {
         int x = snake[i].first;
         int y = snake[i].second;
 
-        m_render[y][x] = (i == 0) ? 'X' : 'O';
+        sf::RectangleShape rectangle({20.f, 20.f});
+        rectangle.setPosition({20.f * static_cast<float>(x), 20.f * static_cast<float>(y)});
+        rectangle.setFillColor(sf::Color(100, 250, 50));
+        // rectangle.setOutlineThickness(2.f);
+        // rectangle.setOutlineColor(sf::Color(0, 0, 0));
+        window.draw(rectangle);
     }
 
-    m_render[m_apple.get_y()][m_apple.get_x()] = 'A';
-
-    for (std::size_t i = 0; i < m_render.size(); i++)
-    {
-        for (std::size_t j = 0; j < m_render[i].size(); j++)
-        {
-            mvprintw(static_cast<int>(i), static_cast<int>(j) * 2, "%c", m_render[i][j]);
-        }
-    }
+    int x = m_apple.get_x();
+    int y = m_apple.get_y();
+    sf::RectangleShape rectangle({20.f, 20.f});
+    rectangle.setPosition({20.f * static_cast<float>(x), 20.f * static_cast<float>(y)});
+    rectangle.setFillColor(sf::Color(255, 0, 0));
+    // rectangle.setOutlineThickness(2.f);
+    // rectangle.setOutlineColor(sf::Color(0, 0, 0));
+    window.draw(rectangle);
 }
 
 bool Game::check_input()
 {
-    int ch;
-    int last_valid = ERR;
-
-    while ((ch = getch()) != ERR)
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
     {
-        last_valid = ch;
+        m_snake.set_direction('w');
     }
-
-    if (last_valid != ERR)
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
     {
-        switch (last_valid)
-        {
-        case 'd':
-            m_snake.set_direction('d');
-            break;
-        case 'a':
-            m_snake.set_direction('a');
-            break;
-        case 'w':
-            m_snake.set_direction('w');
-            break;
-        case 's':
-            m_snake.set_direction('s');
-            break;
-        }
+        m_snake.set_direction('a');
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
+    {
+        m_snake.set_direction('s');
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+    {
+        m_snake.set_direction('d');
     }
 
     return m_snake.check_alive();
@@ -89,8 +92,8 @@ void Game::spawn_apple()
 {
     std::uniform_int_distribution<> distr(0, 9);
 
-    int random_x {};
-    int random_y {};
+    int random_x{};
+    int random_y{};
     bool test = true;
     auto snake = m_snake.get_body();
 

@@ -3,6 +3,7 @@
 #include <random>
 #include "snake.h"
 #include "apple.h"
+#include <SFML/Graphics.hpp>
 
 #ifndef GAME_H
 #define GAME_H
@@ -29,7 +30,7 @@ class Game
 
         std::vector<std::vector<int>>& get_board() { return m_board; }
         Snake& get_snake() { return m_snake; }
-        void print_board();
+        void print_board(sf::RenderWindow& window);
         bool check_input();
         void check_bounds();
         void spawn_apple();

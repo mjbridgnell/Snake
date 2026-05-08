@@ -1,20 +1,25 @@
 # Snake
 
-A simple terminal-based Snake game written in C++ using the ncurses library for rendering and input.
+A simple terminal-based Snake game written in C++ using the SFML for graphics, rendering, and keyboard input
 
+![alt text](image-1.png)
 
 # Features
 
-Real-time snake movement
+Snake movement and collision detection
 
 Keyboard controls (wasd)
 
-Terminal-based UI via ncurses
+Build with SFML and CMake
+
+High Score tracking
 
 
 # Requirements
 
-C++ compiler with C++17 support
+C++17 compatible compiler
 
-ncurses library installed
+CMake
+
+SFML 2.x
 
