@@ -2,7 +2,7 @@
 
 A simple Snake game written in C++ using SFML for graphics, rendering, and keyboard input
 
-![alt text](image-1.png)
+![alt text](snake.png)
 
 # Features
 
