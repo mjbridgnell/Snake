@@ -1,6 +1,6 @@
 # Snake
 
-A simple terminal-based Snake game written in C++ using SFML for graphics, rendering, and keyboard input
+A simple Snake game written in C++ using SFML for graphics, rendering, and keyboard input
 
 ![alt text](image-1.png)
 
