@@ -1,21 +1,12 @@
 
 #include "game.h"
 #include <random>
+#include <chrono>
+#include <thread>
 
 void Game::print_board(sf::RenderWindow &window)
 {
     auto &snake = m_snake.get_body();
-
-    /*for (std::size_t i = 0; i < m_board.size(); i++)
-    {
-        for (std::size_t j = 0; j < m_board[i].size(); j++)
-        {
-            sf::RectangleShape rectangle({20.f, 20.f});
-            rectangle.setPosition({20.f * static_cast<float>(i), 20.f * static_cast<float>(j)});
-            rectangle.setFillColor(sf::Color(255, 255, 255));
-            window.draw(rectangle);
-        }
-    }*/
 
     window.clear(sf::Color::White);
 
@@ -26,7 +17,14 @@ void Game::print_board(sf::RenderWindow &window)
 
         sf::RectangleShape rectangle({20.f, 20.f});
         rectangle.setPosition({20.f * static_cast<float>(x), 20.f * static_cast<float>(y)});
-        rectangle.setFillColor(sf::Color(100, 250, 50));
+        if (i == 0)
+        {
+            rectangle.setFillColor(sf::Color(100, 200, 50));
+        }
+        else
+        {
+            rectangle.setFillColor(sf::Color(100, 250, 50));
+        }
         window.draw(rectangle);
     }
 
@@ -56,6 +54,12 @@ bool Game::check_input()
     {
         m_snake.set_next_direction('d');
     }
+    /*
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::X))
+    {
+        std::this_thread::sleep_for(std::chrono::seconds(100));
+    }
+    */
 
     return m_snake.check_alive();
 }
