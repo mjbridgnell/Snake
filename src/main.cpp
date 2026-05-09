@@ -6,7 +6,7 @@
 #include <SFML/Graphics.hpp>
 
 int g_high_score{};
-const float g_game_speed{0.15f};
+const float g_render_speed{0.15f};
 
 bool play_again(sf::RenderWindow &window, const sf::Font font)
 {
@@ -49,7 +49,6 @@ bool play_again(sf::RenderWindow &window, const sf::Font font)
             }
         }
 
-        //window.clear(sf::Color::White);
         window.draw(text);
         window.display();
     }
@@ -68,8 +67,8 @@ int main()
     }
 
     sf::Clock clock;
-    const float move_delay{g_game_speed};
-    float timer{0.f};
+    const float render_delay{g_render_speed};
+    float render_timer{0.f};
 
     while (window.isOpen())
     {
@@ -79,7 +78,7 @@ int main()
         {
             sf::Event event;
             float delta = clock.restart().asSeconds();
-            timer += delta;
+            render_timer += delta;
 
             while (window.pollEvent(event))
             {
@@ -87,11 +86,12 @@ int main()
                     window.close();
             }
 
-            my_game.check_input();
+            my_game.check_input(); // Check direction every frame
 
-            if (timer >= move_delay)
+            if (render_timer >= render_delay)
             {
-                timer = 0.f;
+                render_timer = 0.f;
+                my_game.get_snake().apply_direction(); // Only set direction every render
                 my_game.get_snake().go_dir();
                 my_game.check_bounds();
 
@@ -102,13 +102,10 @@ int main()
             window.clear(sf::Color::White);
             my_game.print_board(window);
             window.display();
-
         }
 
         int cur_score = my_game.get_snake().get_length();
         g_high_score = std::max(g_high_score, cur_score);
-
-        //window.clear(sf::Color::White);
 
         if (!play_again(window, font))
             return 0;

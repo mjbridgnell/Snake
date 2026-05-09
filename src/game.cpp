@@ -13,8 +13,6 @@ void Game::print_board(sf::RenderWindow &window)
             sf::RectangleShape rectangle({20.f, 20.f});
             rectangle.setPosition({20.f * static_cast<float>(i), 20.f * static_cast<float>(j)});
             rectangle.setFillColor(sf::Color(255, 255, 255));
-            // rectangle.setOutlineThickness(2.f);
-            // rectangle.setOutlineColor(sf::Color(0, 0, 0));
             window.draw(rectangle);
         }
     }
@@ -27,8 +25,6 @@ void Game::print_board(sf::RenderWindow &window)
         sf::RectangleShape rectangle({20.f, 20.f});
         rectangle.setPosition({20.f * static_cast<float>(x), 20.f * static_cast<float>(y)});
         rectangle.setFillColor(sf::Color(100, 250, 50));
-        // rectangle.setOutlineThickness(2.f);
-        // rectangle.setOutlineColor(sf::Color(0, 0, 0));
         window.draw(rectangle);
     }
 
@@ -37,8 +33,6 @@ void Game::print_board(sf::RenderWindow &window)
     sf::RectangleShape rectangle({20.f, 20.f});
     rectangle.setPosition({20.f * static_cast<float>(x), 20.f * static_cast<float>(y)});
     rectangle.setFillColor(sf::Color(255, 0, 0));
-    // rectangle.setOutlineThickness(2.f);
-    // rectangle.setOutlineColor(sf::Color(0, 0, 0));
     window.draw(rectangle);
 }
 
@@ -46,19 +40,19 @@ bool Game::check_input()
 {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
     {
-        m_snake.set_direction('w');
+        m_snake.set_next_direction('w');
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
     {
-        m_snake.set_direction('a');
+        m_snake.set_next_direction('a');
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
     {
-        m_snake.set_direction('s');
+        m_snake.set_next_direction('s');
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
     {
-        m_snake.set_direction('d');
+        m_snake.set_next_direction('d');
     }
 
     return m_snake.check_alive();
