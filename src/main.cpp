@@ -1,8 +1,5 @@
 #include "game.h"
 #include "snake.h"
-#include <chrono>
-#include <thread>
-#include <optional>
 #include <SFML/Graphics.hpp>
 
 int g_high_score{};

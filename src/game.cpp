@@ -6,7 +6,7 @@ void Game::print_board(sf::RenderWindow &window)
 {
     auto &snake = m_snake.get_body();
 
-    for (std::size_t i = 0; i < m_board.size(); i++)
+    /*for (std::size_t i = 0; i < m_board.size(); i++)
     {
         for (std::size_t j = 0; j < m_board[i].size(); j++)
         {
@@ -15,7 +15,9 @@ void Game::print_board(sf::RenderWindow &window)
             rectangle.setFillColor(sf::Color(255, 255, 255));
             window.draw(rectangle);
         }
-    }
+    }*/
+
+    window.clear(sf::Color::White);
 
     for (std::size_t i = 0; i < snake.size(); i++)
     {
