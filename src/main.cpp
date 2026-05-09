@@ -6,29 +6,28 @@
 #include <SFML/Graphics.hpp>
 
 int g_high_score{};
+const float g_game_speed{0.15f};
 
-bool play_again(sf::RenderWindow& window, const sf::Font font)
+bool play_again(sf::RenderWindow &window, const sf::Font font)
 {
     sf::Text text;
     text.setFont(font);
     text.setString("GAME OVER\n"
-        "Score: " + std::to_string(g_high_score) +
-        "\nPlay Again? (y/n)" 
-    );
+                   "Score: " +
+                   std::to_string(g_high_score) +
+                   "\nPlay Again? (y/n)");
     text.setCharacterSize(24);
     text.setFillColor(sf::Color::Black);
-    
+
     sf::FloatRect bounds = text.getLocalBounds();
     text.setOrigin(
         bounds.left + bounds.width / 2.f,
-        bounds.top + bounds.height / 2.f
-    );
+        bounds.top + bounds.height / 2.f);
 
     text.setPosition(
         window.getSize().x / 2.f,
-        window.getSize().y / 2.f
-    );
-    
+        window.getSize().y / 2.f);
+
     while (window.isOpen())
     {
         sf::Event event;
@@ -50,7 +49,7 @@ bool play_again(sf::RenderWindow& window, const sf::Font font)
             }
         }
 
-        window.clear(sf::Color::White);
+        //window.clear(sf::Color::White);
         window.draw(text);
         window.display();
     }
@@ -60,12 +59,17 @@ bool play_again(sf::RenderWindow& window, const sf::Font font)
 int main()
 {
     sf::RenderWindow window(sf::VideoMode({200, 200}), "MAX SNAKE :D");
+    window.setFramerateLimit(60);
     sf::Font font;
 
     if (!font.loadFromFile("src/arial.ttf"))
     {
         return 1;
     }
+
+    sf::Clock clock;
+    const float move_delay{g_game_speed};
+    float timer{0.f};
 
     while (window.isOpen())
     {
@@ -74,6 +78,8 @@ int main()
         while (true) // game loop
         {
             sf::Event event;
+            float delta = clock.restart().asSeconds();
+            timer += delta;
 
             while (window.pollEvent(event))
             {
@@ -81,26 +87,28 @@ int main()
                     window.close();
             }
 
-            window.clear(sf::Color::White);
-
             my_game.check_input();
-            my_game.get_snake().go_dir();
-            my_game.check_bounds();
 
-            if (!my_game.get_snake().check_alive())
-                break;
+            if (timer >= move_delay)
+            {
+                timer = 0.f;
+                my_game.get_snake().go_dir();
+                my_game.check_bounds();
 
+                if (!my_game.get_snake().check_alive())
+                    break;
+            }
+
+            window.clear(sf::Color::White);
             my_game.print_board(window);
-
             window.display();
 
-            std::this_thread::sleep_for(std::chrono::milliseconds(150));
         }
 
         int cur_score = my_game.get_snake().get_length();
         g_high_score = std::max(g_high_score, cur_score);
 
-        window.clear(sf::Color::White);
+        //window.clear(sf::Color::White);
 
         if (!play_again(window, font))
             return 0;
